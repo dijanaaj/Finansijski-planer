@@ -76,7 +76,7 @@ class ProzorPrijava(QWidget):
         naslov.setAlignment(Qt.AlignCenter)
 
         self.unos_ime = QLineEdit()
-        self.unos_ime.setPlaceholderText("Korisničko ime")
+        self.unos_ime.setPlaceholderText("Korisnicko ime")
         self.unos_lozinka = QLineEdit()
         self.unos_lozinka.setPlaceholderText("Lozinka")
         self.unos_lozinka.setEchoMode(QLineEdit.Password)
@@ -102,16 +102,16 @@ class ProzorPrijava(QWidget):
             self.glavni = GlavniProzor(self.baza, id, ime)
             self.glavni.showMaximized()
         else:
-            QMessageBox.warning(self, "Greška", "Proverite korisničko ime i lozinku.")
+            QMessageBox.warning(self, "Greska", "Proverite korisnicko ime i lozinku.")
 
     def registracija(self):
         ime = self.unos_ime.text().strip()
         lozinka = self.unos_lozinka.text().strip()
 
         if self.baza.dodaj_korisnika(ime, lozinka):
-            QMessageBox.information(self, "Uspeh", "Uspešno ste registrovani.")
+            QMessageBox.information(self, "Uspeh", "Uspesno ste registrovani.")
         else:
-            QMessageBox.warning(self, "Greška", "Korisničko ime već postoji.")
+            QMessageBox.warning(self, "Greska", "Korisnicko ime vec postoji.")
 
 
 # GLAVNI PROZOR APLIKACIJE
@@ -128,7 +128,7 @@ class GlavniProzor(QMainWindow):
         raspored = QVBoxLayout()
         centralni.setLayout(raspored)
 
-        dobrodoslica = QLabel(f" Dobrodošli, {ime}!")
+        dobrodoslica = QLabel(f" Dobrodosli, {ime}!")
         dobrodoslica.setStyleSheet("font-size: 20px; font-weight: bold; padding: 10px;")
         raspored.addWidget(dobrodoslica)
 
@@ -149,12 +149,12 @@ class GlavniProzor(QMainWindow):
         self.tip.currentIndexChanged.connect(self.promeni_kategorije)
 
         self.kategorija = QComboBox()
-        self.kategorija.addItems(["Džeparac", "Stipendija", "Ostalo"])
+        self.kategorija.addItems(["Dzeparac", "Stipendija", "Ostalo"])
 
         self.iznos = QLineEdit()
         self.opis = QLineEdit()
 
-        dugme_dodaj = QPushButton("Sačuvaj transakciju")
+        dugme_dodaj = QPushButton("Sacuvaj transakciju")
         dugme_dodaj.clicked.connect(self.dodaj)
 
         forma.addRow("Tip:", self.tip)
@@ -216,7 +216,7 @@ class GlavniProzor(QMainWindow):
     def promeni_kategorije(self):
         self.kategorija.clear()
         if self.tip.currentText() == "Prihod":
-            self.kategorija.addItems(["Džeparac", "Stipendija", "Uplata"])
+            self.kategorija.addItems(["Dzeparac", "Stipendija", "Uplata"])
         else:
             self.kategorija.addItems(["Hrana", "Prevoz", "Knjige", "Zabava", "Ostalo"])
 
@@ -229,12 +229,12 @@ class GlavniProzor(QMainWindow):
             self.baza.dodaj_transakciju(self.korisnik_id, self.tip.currentText().lower(),
                                         self.kategorija.currentText(), iznos, self.opis.text())
 
-            QMessageBox.information(self, "Uspeh", "Transakcija je uspešno sačuvana.")
+            QMessageBox.information(self, "Uspeh", "Transakcija je uspesno sacuvana.")
             self.iznos.clear()
             self.opis.clear()
             self.osvezi_prikaz()
         except:
-            QMessageBox.warning(self, "Greška", "Unesite ispravan iznos (broj veći od 0).")
+            QMessageBox.warning(self, "Greska", "Unesite ispravan iznos (broj veci od 0).")
 
     def osvezi_prikaz(self):
         tip = self.combo_tip_filter.currentText()
@@ -262,7 +262,7 @@ class GlavniProzor(QMainWindow):
         # Brisanje selektovane transakcije iz baze
         izabrani_red = self.tabela.currentRow()
         if izabrani_red == -1:
-            QMessageBox.warning(self, "Greška", "Molimo vas da izaberete transakciju za brisanje.")
+            QMessageBox.warning(self, "Greska", "Molimo vas da izaberete transakciju za brisanje.")
             return
 
         # Dohvati ID iz prve kolone (koja je skrivena)
@@ -274,13 +274,13 @@ class GlavniProzor(QMainWindow):
 
         potvrda = QMessageBox.question(
             self, "Potvrda brisanja",
-            "Da li ste sigurni da želite da obrišete ovu transakciju?",
+            "Da li ste sigurni da zelite da obrisete ovu transakciju?",
             QMessageBox.Yes | QMessageBox.No
         )
 
         if potvrda == QMessageBox.Yes:
             self.baza.obrisi_transakciju(transakcija_id)
-            QMessageBox.information(self, "Obrisano", "Transakcija je uspešno obrisana.")
+            QMessageBox.information(self, "Obrisano", "Transakcija je uspesno obrisana.")
             self.osvezi_prikaz()
 
 
